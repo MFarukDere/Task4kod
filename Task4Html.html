@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task4</title>
+</head>
+<body>
+<b>Sayin Efehan Mun ile beraber yaptik.</b>
+<pre>
+    #include <iostream>
+        using namespace std;
+        #include <vector>
+        #include <string>
+        #include <cmath>
+        int main()
+        {
+            string c;
+            string girilen;
+            cout << "Isleminizi Giriniz" << endl;
+            cout << "Toplamak icin 'x' Cikarmak icin '-' Carpmak icin '*' Bolmek icin '/' ";
+            cout << "Us almak icin '^' Mod almak icin '%' Base almak icin 'b' kullaniniz." << endl;
+            cout << "Islemler ve sayilar arasinda bosluk birakmamaya ozen gosteriniz." << endl;
+            cin >> girilen;
+            vector<float > sayi;
+            vector<string> islem;
+            string sayitext = "";
+            string islemler = "^*/+-%b";
+            for (int i = 0; i < girilen.length(); i++) {
+                bool bulundu = false;
+                for (int j = 0; j < islemler.length(); j++) {
+                    if (girilen[i] == islemler[j]) {
+                        string c(1, girilen[i]);
+        
+                        islem.push_back(c);
+                        sayi.push_back(atof(sayitext.c_str()));
+                        sayitext = "";
+                        bulundu = true;
+                    }
+                }
+                if (bulundu == false) {
+                    sayitext += girilen[i];
+                }
+            }
+            sayi.push_back(atoi(sayitext.c_str()));
+            float  y = 0;
+            auto calculate = [&](float n, string op) {
+                if (op == "*") {
+                    y = sayi[n] * sayi[n + 1];
+                }
+                if (op == "/") {
+                    y = sayi[n] / sayi[n + 1];
+                }
+                if (op == "+") {
+                    y = sayi[n] + sayi[n + 1];
+                }
+                if (op == "-") {
+                    y = sayi[n] - sayi[n + 1];
+                }
+                if (op == "%") {
+                    y = fmod(sayi[n], sayi[n + 1]);
+                }
+                if (op == "^") {
+                    y = pow(sayi[n], sayi[n + 1]);
+                }
+                if (op == "b") {
+                    int ondalik = 1;
+                    int convert = 0;
+                    while (sayi[n] != 0) {
+                        
+                        int rem = fmod(sayi[n], sayi[n + 1]);
+                        convert += rem * ondalik;
+                        sayi[n] /= sayi[n + 1];
+                        ondalik *= 10;
+                    }
+                    y = convert;
+                }
+                islem.erase(islem.begin() + n);
+                sayi[n] = y;
+                sayi.erase(sayi.begin() + (n + 1));
+            };
+            int i = 0;
+            while (i < islem.size()) {
+        
+                if (islem[i] == "^") {
+                    calculate(i, islem[i]);
+                    i -= 1;
+                }
+                i++;
+            }
+            i = 0;
+            while (i < islem.size()) {
+                if (islem[i] == "*" || islem[i] == "/") {
+                    calculate(i, islem[i]);
+                    i -= 1;
+                }
+                i++;
+            }
+            i = 0;
+            while (i < islem.size()) {
+                if (islem[i] == "+" || islem[i] == "-") {
+                    calculate(i, islem[i]);
+                    i -= 1;
+                }
+                i++;
+            }
+            i = 0;
+            while (i < islem.size()) {
+                if (islem[i] == "%") {
+                    calculate(i, islem[i]);
+                }
+                i++;
+            }
+            if (islem.size() > 0) {
+                if (islem[0] == "b") {
+                    calculate(0, islem[0]);
+                }
+                i++;
+            }
+            cout << "Isleminizin sonucu: " <<y;
+            return 0;
+        }
+</pre>   
+</body>
+</html>
